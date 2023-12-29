@@ -3,9 +3,12 @@ package com.epam.mjc.io;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.logging.Logger;
 
 
 public class FileReader {
+
+    private static final Logger logger = Logger.getLogger(FileReader.class.getName());
 
     public Profile getDataFromFile(File file) {
         Profile profile = new Profile();
@@ -17,9 +20,10 @@ public class FileReader {
                 String value = "";
                 if (character == (int) ' ') {
                     continue;
-                } else if (character == (int) ':') {
+                }
+                if (character == ':') {
                     isValue = true;
-                } else if (character == (int) '\r' || character == (int) '\n') {
+                } else if (character == '\r' || character == '\n') {
                     isValue = false;
                     key = "";
                 } else if (isValue) {
@@ -39,13 +43,15 @@ public class FileReader {
                             profile.setPhone(Long.parseLong(profile.getPhone() == null ? value :
                                     profile.getPhone().toString().concat(value)));
                             break;
+                        default:
+                            logger.info("Not allowed key");
                     }
                 } else {
                     key = key.concat(String.valueOf(Character.toChars(character)[0]));
                 }
             }
         } catch (IOException e) {
-            System.out.println(e.getMessage());
+            logger.info(e.getMessage());
         }
         return profile;
     }
