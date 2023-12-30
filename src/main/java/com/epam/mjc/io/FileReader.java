@@ -18,7 +18,7 @@ public class FileReader {
             String key = "";
             while ((character = inputStream.read()) != -1) {
                 String value = "";
-                if (character == (int) ' ') {
+                if (character == ' ') {
                     continue;
                 }
                 if (character == ':') {
@@ -28,24 +28,7 @@ public class FileReader {
                     key = "";
                 } else if (isValue) {
                     value = String.valueOf(Character.toChars(character));
-                    switch (key) {
-                        case "Name":
-                            profile.setName(profile.getName() == null ? value : profile.getName().concat(value));
-                            break;
-                        case "Age":
-                            profile.setAge(Integer.parseInt(profile.getAge() == null ? value :
-                                    profile.getAge().toString().concat(value)));
-                            break;
-                        case "Email":
-                            profile.setEmail(profile.getEmail() == null ? value : profile.getEmail().concat(value));
-                            break;
-                        case "Phone":
-                            profile.setPhone(Long.parseLong(profile.getPhone() == null ? value :
-                                    profile.getPhone().toString().concat(value)));
-                            break;
-                        default:
-                            logger.info("Not allowed key");
-                    }
+                    setProfileField(profile, key, value);
                 } else {
                     key = key.concat(String.valueOf(Character.toChars(character)[0]));
                 }
@@ -54,5 +37,26 @@ public class FileReader {
             logger.info(e.getMessage());
         }
         return profile;
+    }
+
+    private void setProfileField(Profile profile, String key, String value) {
+        switch (key) {
+            case "Name":
+                profile.setName(profile.getName() == null ? value : profile.getName().concat(value));
+                break;
+            case "Age":
+                profile.setAge(Integer.parseInt(profile.getAge() == null ? value :
+                        profile.getAge().toString().concat(value)));
+                break;
+            case "Email":
+                profile.setEmail(profile.getEmail() == null ? value : profile.getEmail().concat(value));
+                break;
+            case "Phone":
+                profile.setPhone(Long.parseLong(profile.getPhone() == null ? value :
+                        profile.getPhone().toString().concat(value)));
+                break;
+            default:
+                logger.info("Not allowed key");
+        }
     }
 }
